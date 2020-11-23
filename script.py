@@ -1,13 +1,14 @@
 import requests, json
 import keys
 
-clientId = keys.client_id
-clientSecret = keys.client_secret
+user_id = keys.user_id
+auth = keys.oauth_token
 
 class BuildPlaylist():
     
     def __init__(self):
-        self.clientId = clientId
+        self.user_id = user_id
+        self.auth = auth
 
     def createPlaylist(self):
 
@@ -16,5 +17,16 @@ class BuildPlaylist():
                 "description": "Playlist related to discord chat",
                 "public": False
         })
+        
+        query = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+        response = requests.post(
+            query,
+            data=request_body,
+            headers={
+                "Content-Type":"application/json",
+                "Authorization":f"Bearer {auth}"
+            }
+        )
+        response_json = response.json()
 
-        query = f"https://api.spotify.com/v1/users/{clientId}/playlists"
+        return response_json["id"] 
