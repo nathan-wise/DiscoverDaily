@@ -4,36 +4,20 @@ import keys
 user_id = keys.user_id
 auth = keys.oauth_token
 
-class BuildPlaylist():
-    
+class EditPlayist():
+    """
+    This will add a song to a play list
+    This may need to be broken into two pieces later one piece editing the playlist
+    And the other piece getting either the current playing song or a specific song
+    """
+    # base set up
     def __init__(self):
         self.user_id = user_id
         self.auth = auth
-
-    """
-    Leave this commented for now -> do not want to run up uses of auth
-    """
-    # def create_playlist(self):
-
-    #     request_body = json.dump({
-    #             "name": "Discord Playlist",
-    #             "description": "Playlist related to discord chat",
-    #             "public": False
-    #     })
-        
-    #     query = f"https://api.spotify.com/v1/users/{user_id}/playlists"
-    #     response = requests.post(
-    #         query,
-    #         data=request_body,
-    #         headers={
-    #             "Content-Type":"application/json",
-    #             "Authorization":f"Bearer {auth}"
-    #         }
-    #     )
-    #     response_json = response.json()
-
-    #     return response_json["id"] 
     
+    # get playlist to add song to
+    
+    # get a specific song
     def get_song(self, track, artist):
         #  Spotify calls songs -> tracks (tracks can be sung or instrumental/songs have to have singing)
 
@@ -53,6 +37,9 @@ class BuildPlaylist():
         # returns the first track
         uri = songs[0]["uri"]
         return uri
+    
+    # add song to playlist
+
 
 build = BuildPlaylist()
 print(build.get_song("Shadow", "Kesha"))
