@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import json, requests
 from secrets import user_id, spotify_token
 
@@ -21,7 +22,7 @@ class CreatePlaylist:
         response = requests.get(
             check_query,
             headers={
-                "Authorization" : f"Bearer {self.spotify_token}",
+                "Authorization": f"Bearer {self.spotify_token}",
                 "Content-Type": "application/json"
             }
         )
@@ -29,24 +30,45 @@ class CreatePlaylist:
         response_json = response.json()
         items = response_json['items']
 
-        playlistExists = False
-        playlistID = ''
+        playlistID = NULL
 
         # this range is created from the auto limit of 20
         for num in range(20):
-            if items[num]['name'] == 'Daily Discover':
-                playlistExists = True
+            if items[num]['name'] == 'Discover Daily':
                 playlistID = items[num]['id']
         
-        return playlistExists
+        if playlistID is not NULL:
+            self.updatePlaylist(playlistID)
+        else:
+            self.createNewPlaylist()
 
     # if there is not a playlist with the title then create one
-    def createPlaylist(self):
-        pass
+    def createNewPlaylist(self):
+        create_query = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
+
+        request_body = json.dumps({
+            "name": "Discover Daily",
+            "description": "Will Describe more in future",
+            "public": False
+        })
+
+        response = requests.post(
+            create_query,
+            data=request_body,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.spotify_token}"
+            }
+        )
+
+        response_json = response.json()
+        playlistID = response_json["id"]
+        self.updatePlaylist(playlistID)
 
     #if there is a playlist with that title then update it
-    def updatePlaylist(self):
-        pass
+    def updatePlaylist(self, playlistID):
+        print(playlistID)
+
 
 test = CreatePlaylist()
 check = test.checkPlaylists()
