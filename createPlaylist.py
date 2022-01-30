@@ -2,6 +2,9 @@ from asyncio.windows_events import NULL
 import json, requests
 from secrets import user_id, spotify_token
 
+# user_id is the users name like "thraac"
+# spotify_token is the oauth token
+
 class CreatePlaylist:
     """
     create a playlist with new songs everyday
@@ -30,21 +33,21 @@ class CreatePlaylist:
         response_json = response.json()
         items = response_json['items']
 
-        playlistID = NULL
+        playlist_id = NULL
         tracks = 0
 
         # this range is created from the auto limit of 20
         for num in range(20):
             if items[num]['name'] == 'Discover Daily':
                 # id of the playlist
-                playlistID = items[num]['id']
+                playlist_id = items[num]['id']
 
                 #number of tracks in the playlist
                 tracks = items[num]["tracks"]["total"]
 
 
-        if playlistID is not NULL:
-            self.updatePlaylist(playlistID, tracks)
+        if playlist_id is not NULL:
+            self.updatePlaylist(playlist_id, tracks)
         else:
             self.createNewPlaylist()
 
@@ -70,23 +73,32 @@ class CreatePlaylist:
         )
 
         response_json = response.json()
-        playlistID = response_json["id"]
+        playlist_id = response_json["id"]
 
         # number of tracks in the playlist
         tracks = response_json["tracks"]["total"]
 
-        self.updatePlaylist(playlistID, tracks)
+        self.updatePlaylist(playlist_id, tracks)
 
     # if there is a playlist with that title then update it
-    def updatePlaylist(self, playlistID, tracks):
+    def updatePlaylist(self, playlist_id, tracks):
+        add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
         if tracks > 0:
-            self.removeFromPlaylist(playlistID, tracks)
+            self.removeFromPlaylist(playlist_id, tracks)
+
+        #TODO: add songs to the playlist
+        #TODO: find songs to add to the playlist
+        # i dont think we can use their ML to get tracks
+        # what we can do is get random tracks
+            # while discover weekly gives things spotify thinks youll like
+            # we can create something that is completely random instead
 
     # remove tracks from the playlist
-    def removeFromPlaylist(self, playlistID, tracks):
-        get_query = f"https://api.spotify.com/v1/playlists/{playlistID}"
-        delete_query = f"https://api.spotify.com/v1/playlists/{playlistID}/tracks"
+    def removeFromPlaylist(self, playlist_id, tracks):
+        get_query = f"https://api.spotify.com/v1/playlists/{playlist_id}"
+        delete_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
 
+        # this is to get the track in the playlist which is used later for track_id
         response = requests.get(
             get_query,
             headers={
@@ -94,13 +106,13 @@ class CreatePlaylist:
                 "Content-Type": "application/json"
             }
         )
-
         response_json = response.json()
-
-        # this will get the track id
+       
         for num in range(tracks):
+            # this will get the track id
             track_id = response_json['tracks']['items'][num]['track']['id']
-            print(track_id)
+
+            # the code to delete the track
             delete_body = json.dumps({
                 "tracks":[
                     {
@@ -109,6 +121,7 @@ class CreatePlaylist:
                 ]
             })
 
+            # the request to delete the track
             deletes = requests.delete(
                 delete_query,
                 data=delete_body,
