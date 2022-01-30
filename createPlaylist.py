@@ -83,15 +83,21 @@ class CreatePlaylist:
     # if there is a playlist with that title then update it
     def updatePlaylist(self, playlist_id, tracks):
         add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+        search_query = "https://api.spotify.com/v1/search"
+
+        # this might get moved somwhere else
         if tracks > 0:
             self.removeFromPlaylist(playlist_id, tracks)
 
-        #TODO: add songs to the playlist
+        
         #TODO: find songs to add to the playlist
         # i dont think we can use their ML to get tracks
         # what we can do is get random tracks
             # while discover weekly gives things spotify thinks youll like
             # we can create something that is completely random instead
+            # you can use the search api and use a % "wildcard"
+
+        #TODO: add songs to the playlist
 
     # remove tracks from the playlist
     def removeFromPlaylist(self, playlist_id, tracks):
@@ -131,10 +137,6 @@ class CreatePlaylist:
                 }
             )
 
-
-
-        # have to know the track's id to remove it
-        pass
 
 
 test = CreatePlaylist()
