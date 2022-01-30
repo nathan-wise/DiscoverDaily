@@ -8,7 +8,7 @@ class CreatePlaylist:
         self.spotify_token = spotify_token
 
     def checkPlaylists(self):
-        check_query = "https://api.spotify.com/v1/users/{self.user_id}/playlists"
+        check_query = f"https://api.spotify.com/v1/users/{self.user_id}/playlists"
 
         # request_body = json.dumps {
             
@@ -18,7 +18,7 @@ class CreatePlaylist:
             check_query,
             # data=request_body,
             headers={
-                "Authorization" : "Bearer {self.spotify_token}",
+                "Authorization" : f"Bearer {self.spotify_token}",
                 "Content-Type": "application/json"
             }
         )
