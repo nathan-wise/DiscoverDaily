@@ -109,3 +109,6 @@ venv.bak/
 
 #keys
 keys.py
+
+#misc
+notes.txt
