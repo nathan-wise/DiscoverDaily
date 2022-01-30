@@ -30,12 +30,13 @@ class CreatePlaylist:
         items = response_json['items']
 
         playlistExists = False
+        playlistID = ''
 
         # this range is created from the auto limit of 20
         for num in range(20):
             if items[num]['name'] == 'Daily Discover':
                 playlistExists = True
-
+                playlistID = items[num]['id']
         
         return playlistExists
 
