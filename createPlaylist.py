@@ -95,7 +95,7 @@ class CreatePlaylist:
         randomChar = rand.getRandomCharacter()
         randomOff = rand.getRandomOffset()
 
-        search_query = f"https://api.spotify.com/v1/search?1={randomChar}%25&type=track&offset={randomOff}"
+        search_query = f"https://api.spotify.com/v1/search?q={randomChar}%25&type=track&offset={randomOff}"
 
         search_response = requests.get(
             search_query,
