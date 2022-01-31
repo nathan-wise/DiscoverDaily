@@ -1,5 +1,8 @@
 from asyncio.windows_events import NULL
 import json, requests
+from random import Random
+
+from randomGenerator import RandomGenerator
 from secrets import user_id, spotify_token
 
 # user_id is the users name like "thraac"
@@ -82,12 +85,31 @@ class CreatePlaylist:
 
     # if there is a playlist with that title then update it
     def updatePlaylist(self, playlist_id, tracks):
-        add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-        search_query = "https://api.spotify.com/v1/search"
-
-        # this might get moved somwhere else
         if tracks > 0:
             self.removeFromPlaylist(playlist_id, tracks)
+
+        add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+
+        rand = RandomGenerator()
+
+        randomChar = rand.getRandomCharacter()
+        randomOff = rand.getRandomOffset()
+
+        search_query = f"https://api.spotify.com/v1/search?1={randomChar}%25&type=track&offset={randomOff}"
+
+        search_response = requests.get(
+            search_query,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.spotify_token}"
+            }
+        )
+
+        search_json = search_response.json()
+        print(search_json)
+
+        # this might get moved somwhere else
+        
 
         #TODO: find songs to add to the playlist
         # i dont think we can use their ML to get tracks

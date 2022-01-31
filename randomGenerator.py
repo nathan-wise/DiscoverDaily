@@ -5,7 +5,7 @@ class RandomGenerator:
     def __init__(self) -> None:
         pass
 
-    def randomCharacter(self):
+    def getRandomCharacter(self):
         characters = ["a", "b", "c", "d", "e",
                      "f", "g", "h", "i", "j", 
                      "k", "l", "m", "n", "o", "p", 
@@ -14,5 +14,5 @@ class RandomGenerator:
         randomNumber = random.randint(0, 25)
         return characters[randomNumber]
 
-    def randomOffset(self):
+    def getRandomOffset(self):
         return random.randint(0, 500)
