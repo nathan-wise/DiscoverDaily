@@ -89,7 +89,6 @@ class CreatePlaylist:
         if tracks > 0:
             self.removeFromPlaylist(playlist_id, tracks)
 
-        
         #TODO: find songs to add to the playlist
         # i dont think we can use their ML to get tracks
         # what we can do is get random tracks
