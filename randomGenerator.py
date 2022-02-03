@@ -16,3 +16,6 @@ class RandomGenerator:
 
     def getRandomOffset(self):
         return random.randint(0, 500)
+
+    def getRandomTrack(self):
+        return random.randint(0,5)

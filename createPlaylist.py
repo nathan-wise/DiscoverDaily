@@ -83,17 +83,12 @@ class CreatePlaylist:
 
         self.updatePlaylist(playlist_id, tracks)
 
-    # if there is a playlist with that title then update it
-    def updatePlaylist(self, playlist_id, tracks):
-        if tracks > 0:
-            self.removeFromPlaylist(playlist_id, tracks)
-
-        add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-
+    def getSong(self):
         rand = RandomGenerator()
 
         randomChar = rand.getRandomCharacter()
         randomOff = rand.getRandomOffset()
+        randomTrack = rand.getRandomTrack()
 
         search_query = f"https://api.spotify.com/v1/search?q={randomChar}%25&type=track&offset={randomOff}"
 
@@ -106,17 +101,36 @@ class CreatePlaylist:
         )
 
         search_json = search_response.json()
-        print(search_json)
+        return search_json["tracks"]["items"][randomTrack]['id']
 
-        # this might get moved somwhere else
+    # if there is a playlist with that title then update it
+    def updatePlaylist(self, playlist_id, tracks):
+        if tracks > 0:
+            self.removeFromPlaylist(playlist_id, tracks)
+
+        add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+        five = 5
+
         
 
-        #TODO: find songs to add to the playlist
-        # i dont think we can use their ML to get tracks
-        # what we can do is get random tracks
-            # while discover weekly gives things spotify thinks youll like
-            # we can create something that is completely random instead
-            # you can use the search api and use a % "wildcard"
+        while five > 0:
+            songToAdd = self.getSong()
+            add_body = json.dumps({
+                "uris":[
+                        f"spotify:track:{songToAdd}"
+                ]
+            })
+
+            add_response = requests.post(
+                add_query,
+                data=add_body,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {self.spotify_token}"
+                }
+            )
+
+            five -= 1
 
         #TODO: add songs to the playlist
 
