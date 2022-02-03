@@ -111,8 +111,7 @@ class CreatePlaylist:
         add_query = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
         five = 5
 
-        
-
+        # change the 5 to any number this is the number of songs that will be gotten
         while five > 0:
             songToAdd = self.getSong()
             add_body = json.dumps({
@@ -131,8 +130,6 @@ class CreatePlaylist:
             )
 
             five -= 1
-
-        #TODO: add songs to the playlist
 
     # remove tracks from the playlist
     def removeFromPlaylist(self, playlist_id, tracks):
