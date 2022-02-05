@@ -1,6 +1,5 @@
 from asyncio.windows_events import NULL
 import json, requests
-from random import Random
 
 from randomGenerator import RandomGenerator
 from secrets import user_id, spotify_token
@@ -13,8 +12,10 @@ class CreatePlaylist:
     create a playlist with new songs everyday
 
     checkPlaylists: checks to see if there is a playlist by the name "Discover Daily"
-    createPlaylist: creates a playlist if there no existing playlist
+    createNewPlaylist: creates a playlist if there no existing playlist
+    getSong: finds random songs on Spotify
     updatePlaylist: updates the playlist
+    removeFromPlaylist: removes all existing songs from the playlist
     """
 
     def __init__(self) -> None:
